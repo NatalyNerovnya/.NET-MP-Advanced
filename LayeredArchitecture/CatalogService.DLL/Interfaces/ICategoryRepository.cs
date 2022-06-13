@@ -1,8 +1,8 @@
 ﻿using CatalogService.Domain.Models;
 
-namespace CatalogService.BLL.Interfaces;
+namespace CatalogService.DLL.Interfaces;
 
-public interface ICategoryService
+public interface ICategoryRepository
 {
     Task<Category> GetById(long id);
 
