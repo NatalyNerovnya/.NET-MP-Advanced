@@ -1,4 +1,5 @@
-﻿using CategoryService.Application.Interfaces;
+﻿using CategoryService.Application.Exceptions;
+using CategoryService.Application.Interfaces;
 using CategoryService.Application.Interfaces.Commands;
 
 namespace CategoryService.Application.Commands.DeleteCategory;
@@ -12,8 +13,14 @@ public class DeleteCategoryCommandHandler : ICommandHandler<DeleteCategoryComman
         _context = context;
     }
 
-    public Task Handle(DeleteCategoryCommand command)
+    public async Task Handle(DeleteCategoryCommand command)
     {
-        return _context.DeleteCategory(command.Id);
+        var existedCategory = await _context.GetCategoryById(command.Id);
+        if (existedCategory is null)
+        {
+            throw new NotExistException($"Item {command.Id} doesn't exists");
+        }
+
+        await _context.DeleteCategory(command.Id);
     }
 }
