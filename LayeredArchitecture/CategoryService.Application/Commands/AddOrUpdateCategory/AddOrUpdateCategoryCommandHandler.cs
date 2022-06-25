@@ -1,4 +1,6 @@
-﻿using CategoryService.Application.Interfaces;
+﻿using System.Text;
+using CategoryService.Application.Exceptions;
+using CategoryService.Application.Interfaces;
 using CategoryService.Application.Interfaces.Commands;
 
 namespace CategoryService.Application.Commands.AddOrUpdateCategory;
@@ -14,6 +16,15 @@ public class AddOrUpdateCategoryCommandHandler : ICommandHandler<AddOrUpdateCate
 
     public async Task Handle(AddOrUpdateCategoryCommand command)
     {
+        var validator = new AddOrUpdateCommandValidator();
+        var results = await validator.ValidateAsync(command);
+        if (!results.IsValid)
+        {
+            var failures = results.Errors.ToList();
+            var message = new StringBuilder();
+            failures.ForEach(f => { message.Append(f.ErrorMessage + Environment.NewLine); });
+            throw new ValidationException(message.ToString());
+        }
         var existedCategory = await _context.GetCategoryById(command.Id);
 
         if (existedCategory is null)
