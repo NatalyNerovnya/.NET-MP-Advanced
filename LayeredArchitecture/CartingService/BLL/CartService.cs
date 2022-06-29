@@ -31,7 +31,7 @@ public class CartService: ICartService
             throw new ItemDuplicateException($"Item id={item.Id} already exists in cart cartId={cartId}");
         }
 
-        if ((await _itemValidator.ValidateAsync(item)).IsValid)
+        if (!(await _itemValidator.ValidateAsync(item)).IsValid)
         {
             throw new ItemNotValidException($"Item id={item.Id} is not valid");
         }

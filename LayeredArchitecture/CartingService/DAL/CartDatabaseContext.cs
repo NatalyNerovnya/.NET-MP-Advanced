@@ -25,6 +25,6 @@ public class CartDatabaseContext : ICartDatabaseContext
     {
         using var db = new LiteDatabase(_connectionString);
         var collection = db.GetCollection<Cart>(CartCollectionName);
-        return Task.FromResult(collection.Insert(cart));
+        return Task.FromResult(collection.Update(cart));
     }
 }

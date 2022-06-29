@@ -39,7 +39,7 @@ public class CartController: ControllerBase
     }
 
     [HttpPost("{id}/item")]
-    public async Task<ActionResult> AddItem(string id, [FromBody] Item item)
+    public async Task<ActionResult> AddItem(string id, Item item)
     {
         if (!int.TryParse(id, out var cartId))
         {
@@ -48,9 +48,8 @@ public class CartController: ControllerBase
 
         try
         {
-            var cart = await _cartService.GetCartById(cartId);
             await _cartService.AddItem(cartId, item);
-            return Ok($"Item was added to cart {cart.Id}");
+            return Ok($"Item was added to cart {cartId}");
         }
         catch (CartNotFoundException e)
         {
