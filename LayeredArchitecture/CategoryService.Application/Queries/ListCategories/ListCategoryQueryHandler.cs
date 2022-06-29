@@ -4,7 +4,7 @@ using CategoryService.Application.Interfaces.Queries;
 
 namespace CategoryService.Application.Queries.ListCategories;
 
-public class ListCategoryQueryHandler: IQueryHandler<ListCategoryQuery, IEnumerable<Category>>
+public class ListCategoryQueryHandler: IQueryHandler<ListCategoryQuery, List<Category>>
 {
     private readonly IApplicationContext _context;
 
@@ -13,7 +13,7 @@ public class ListCategoryQueryHandler: IQueryHandler<ListCategoryQuery, IEnumera
         _context = context;
     }
 
-    public Task<IEnumerable<Category>> Handle(ListCategoryQuery query)
+    public Task<List<Category>> Handle(ListCategoryQuery query)
     {
         return _context.GetAllCategories();
     }

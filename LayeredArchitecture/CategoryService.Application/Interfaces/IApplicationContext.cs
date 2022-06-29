@@ -6,9 +6,9 @@ public interface IApplicationContext
 {
     Task<Category?> GetCategoryById(long id);
 
-    Task<IEnumerable<Category>> GetAllCategories();
+    Task<List<Category>> GetAllCategories();
 
-    Task<long> AddCategory(Category category);
+    Task AddCategory(Category category);
 
     Task<bool> DeleteCategory(long id);
 
