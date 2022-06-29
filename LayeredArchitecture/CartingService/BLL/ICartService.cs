@@ -10,5 +10,5 @@ public interface ICartService
 
     Task AddItem(int cartId, Item item);
 
-    Task RemoveItem(int cartId, Item item);
+    Task RemoveItem(int cartId, int item);
 }

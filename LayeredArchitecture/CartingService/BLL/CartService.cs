@@ -41,15 +41,16 @@ public class CartService: ICartService
         await _cartRepository.Update(existedCart);
     }
 
-    public async Task RemoveItem(int cartId, Item item)
+    public async Task RemoveItem(int cartId, int itemId)
     {
         var existedCart = await GetCartById(cartId);
-        if (existedCart.Items.All(x => x.Id != item.Id))
+        if (existedCart.Items.All(x => x.Id != itemId))
         {
-            return;
+            throw new ItemNotFoundException($"Item with id={itemId} is not found");
         }
 
-        existedCart.Items.Remove(item);
+        var existedItem = existedCart.Items.First(x => x.Id == itemId);
+        existedCart.Items.Remove(existedItem);
         await _cartRepository.Update(existedCart);
     }
 
@@ -58,7 +59,7 @@ public class CartService: ICartService
         var cart = await _cartRepository.GetById(cartId);
         if (cart is null)
         {
-            throw new CartNotFoundException($"Item with id={cartId} is not found");
+            throw new CartNotFoundException($"Cart with id={cartId} is not found");
         }
 
         return cart;

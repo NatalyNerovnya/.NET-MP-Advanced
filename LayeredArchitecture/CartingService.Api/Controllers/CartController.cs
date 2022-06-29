@@ -14,6 +14,29 @@ public class CartController: ControllerBase
     {
         _cartService = cartService;
     }
+    
+    [HttpGet("v2.0/[controller]/{id}")]
+    public async Task<ActionResult<IEnumerable<Item>>> GetV2(string id)
+    {
+        if (!int.TryParse(id, out var validId))
+        {
+            return BadRequest();
+        }
+
+        try
+        {
+            var items = await _cartService.GetAllItems(validId);
+            return Ok(items);
+        }
+        catch (CartNotFoundException e)
+        {
+            return NotFound();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
+        }
+    }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<Cart>> Get(string id)
@@ -62,6 +85,33 @@ public class CartController: ControllerBase
         catch (ItemNotValidException e)
         {
             return BadRequest($"Item is not valid");
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
+        }
+    }
+
+    [HttpDelete("{id}/item/{itemId}")]
+    public async Task<ActionResult> AddItem(string id, string itemId)
+    {
+        if (!int.TryParse(id, out var cartId) || !int.TryParse(itemId, out var parsedItemId))
+        {
+            return BadRequest();
+        }
+
+        try
+        {
+            await _cartService.RemoveItem(cartId, parsedItemId);
+            return Ok($"Item {itemId} was deleted from cart {cartId}");
+        }
+        catch (CartNotFoundException e)
+        {
+            return NotFound($"Cart {id} doesn't exists.");
+        }
+        catch (ItemNotFoundException e)
+        {
+            return BadRequest(e.Message);
         }
         catch (Exception e)
         {
