@@ -53,7 +53,7 @@ public class CartService: ICartService
         await _cartRepository.Update(existedCart);
     }
 
-    private async Task<Cart> GetCartById(int cartId)
+    public async Task<Cart> GetCartById(int cartId)
     {
         var cart = await _cartRepository.GetById(cartId);
         if (cart is null)
