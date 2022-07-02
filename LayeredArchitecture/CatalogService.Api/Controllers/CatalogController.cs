@@ -1,4 +1,5 @@
-﻿using CatalogService.Domain.Models;
+﻿using CatalogService.Api.Models;
+using CatalogService.Domain.Models;
 using CategoryService.Application.Commands.AddOrUpdateCategory;
 using CategoryService.Application.Commands.DeleteCategory;
 using CategoryService.Application.Interfaces.Commands;
@@ -20,7 +21,7 @@ public class CatalogController: ControllerBase
         _commandDispatcher = commandDispatcher;
     }
 
-    [HttpGet("category")]
+    [HttpGet("category", Name = nameof(Get))]
     public async Task<ActionResult<IEnumerable<Category>>> Get()
     {
         try
@@ -35,7 +36,7 @@ public class CatalogController: ControllerBase
     }
 
     [HttpPost("category")]
-    public async Task<ActionResult> Post(Category category)
+    public async Task<ActionResult<ResponseWithLinks<object>>> Post(Category category)
     {
         try
         {
@@ -45,7 +46,27 @@ public class CatalogController: ControllerBase
                 Name = category.Name,
                 Image = category.Image
             });
-            return Ok();
+            var response = new ResponseWithLinks<object>()
+            {
+                Body = { },
+                Links = new List<Link>()
+                {
+                    new()
+                    {
+                        Href = Url.Link(nameof(Get), new {} ) ?? "unknown",
+                        Method = "GET",
+                        Rel = "get_all"
+                    },
+                    new()
+                    {
+                        Href = Url.Link(nameof(Delete), new { id= category.Id}) ?? "unknown",
+                        Method = "DELETE",
+                        Rel = "delete"
+                    }
+                }
+            };
+
+            return Ok(response);
         }
         catch (Exception e)
         {
@@ -53,7 +74,7 @@ public class CatalogController: ControllerBase
         }
     }
 
-    [HttpDelete("category/{id}")]
+    [HttpDelete("category/{id}", Name = nameof(Delete))]
     public async Task<ActionResult> Delete(long id)
     {
         try
