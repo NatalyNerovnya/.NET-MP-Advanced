@@ -13,4 +13,6 @@ public interface IApplicationContext
     Task<bool> DeleteCategory(long id);
 
     Task UpdateCategory(Category category);
+
+    Task<List<Item>> GetItemsByCategoryId(long id, int skip, int limit);
 }

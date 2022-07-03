@@ -1,4 +1,4 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using CategoryService.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,6 +8,7 @@ public static class InfrastructureSetup
 {
     public static void AddCatalogDbContext(this IServiceCollection services)
     {
+        services.AddScoped<IApplicationContext, ApplicationContext>();
         services.AddDbContext<CatalogDbContext>(options => options.UseInMemoryDatabase(databaseName: "Test"));
      }
 }

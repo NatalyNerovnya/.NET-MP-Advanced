@@ -7,4 +7,6 @@ public class Category
     public string Name { get; set; }
 
     public Uri? Image { get; set; }
+
+    public List<Item> Items { get; set; }
 }

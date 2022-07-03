@@ -5,6 +5,7 @@ using CategoryService.Application.Commands.DeleteCategory;
 using CategoryService.Application.Interfaces.Commands;
 using CategoryService.Application.Interfaces.Queries;
 using CategoryService.Application.Queries.ListCategories;
+using CategoryService.Application.Queries.ListItems;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CatalogService.Api.Controllers;
@@ -84,6 +85,25 @@ public class CatalogController: ControllerBase
                 Id = id
             });
             return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest();
+        }
+    }
+
+    [HttpGet("category/{id}/items")]
+    public async Task<ActionResult<IEnumerable<Category>>> GetItems(long id, [FromQuery] int skip, [FromQuery] int limit)
+    {
+        try
+        {
+            var result = await _queryDispatcher.Send<ListItemsQuery, List<Item>>(new ListItemsQuery()
+            {
+                Limit = limit,
+                Skip = skip,
+                CategoryId = id
+            });
+            return Ok(result);
         }
         catch (Exception e)
         {

@@ -1,8 +1,6 @@
-﻿using System.Reflection;
-using CatalogService.Domain.Models;
+﻿using CatalogService.Domain.Models;
 using CategoryService.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 
 namespace CatalogService.Infrastructure;
 
@@ -14,9 +12,7 @@ public class ApplicationContext: IApplicationContext
     {
         _dbContext = context;
         _dbContext.Database.EnsureCreated();
-
     }
-
 
     public Task<Category?> GetCategoryById(long id)
     {
@@ -52,5 +48,10 @@ public class ApplicationContext: IApplicationContext
     {
         _dbContext.Categories.Update(category);
         return _dbContext.SaveChangesAsync();
+    }
+
+    public Task<List<Item>> GetItemsByCategoryId(long id, int skip, int limit)
+    {
+        return _dbContext.Items.Where(x => x.CategoryId == id).Skip(skip).Take(limit).ToListAsync();
     }
 }
