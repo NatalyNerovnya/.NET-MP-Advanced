@@ -22,13 +22,12 @@ public class CatalogDbContext: DbContext
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         modelBuilder.Entity<Category>()
-            .HasMany(e => e.Items)
-            .WithOne(x => x.Category);
-
-        modelBuilder.Entity<Category>()
-        .HasData(new List<Category>()
+            .HasData(new List<Category>()
         {
-            new Category() { Id = 1, Name = "Milk products" },
+            new Category() {
+                Id = 1,
+                Name = "Milk products"
+            },
             new Category() { Id = 2, Name = "Bread" },
             new Category() { Id = 3, Name = "Cakes" },
         });

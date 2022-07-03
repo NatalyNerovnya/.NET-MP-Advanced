@@ -1,7 +1,9 @@
 ﻿using CatalogService.Api.Models;
 using CatalogService.Domain.Models;
+using CategoryService.Application.Commands.AddItem;
 using CategoryService.Application.Commands.AddOrUpdateCategory;
 using CategoryService.Application.Commands.DeleteCategory;
+using CategoryService.Application.Commands.DeleteItem;
 using CategoryService.Application.Interfaces.Commands;
 using CategoryService.Application.Interfaces.Queries;
 using CategoryService.Application.Queries.ListCategories;
@@ -32,7 +34,7 @@ public class CatalogController: ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e);
         }
     }
 
@@ -60,9 +62,15 @@ public class CatalogController: ControllerBase
                     },
                     new()
                     {
-                        Href = Url.Link(nameof(Delete), new { id= category.Id}) ?? "unknown",
+                        Href = Url.Link(nameof(Delete), new { id = category.Id}) ?? "unknown",
                         Method = "DELETE",
                         Rel = "delete"
+                    },
+                    new()
+                    {
+                        Href = Url.Link(nameof(GetItems), new { id = category.Id}) ?? "unknown",
+                        Method = "GET",
+                        Rel = "get_items"
                     }
                 }
             };
@@ -71,7 +79,7 @@ public class CatalogController: ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e);
         }
     }
 
@@ -88,11 +96,11 @@ public class CatalogController: ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e);
         }
     }
 
-    [HttpGet("category/{id}/items")]
+    [HttpGet("category/{id}/item", Name = nameof(GetItems))]
     public async Task<ActionResult<IEnumerable<Category>>> GetItems(long id, [FromQuery] int skip, [FromQuery] int limit)
     {
         try
@@ -107,7 +115,44 @@ public class CatalogController: ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e);
+        }
+    }
+
+    [HttpPost("category/{id}/item")]
+    public async Task<ActionResult<IEnumerable<Category>>> GetItems(long id, Item item)
+    {
+        try
+        {
+            await _commandDispatcher.Send(
+                new AddItemCommand()
+                {
+                    CategoryId = id,
+                    Item = item
+                });
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
+        }
+    }
+
+    [HttpDelete("category/{id}/item/{itemId}")]
+    public async Task<ActionResult<IEnumerable<Category>>> DeleteItem(long id, long itemId)
+    {
+        try
+        {
+            await _commandDispatcher.Send(
+                new DeleteItemCommand()
+                {
+                    Id = itemId
+                });
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
         }
     }
 }

@@ -6,8 +6,6 @@ public class Item
 
     public long CategoryId { get; set; }
 
-    public Category? Category { get; set; }
-
     public string Name { get; set; }
 
     public string? Description { get; set; }

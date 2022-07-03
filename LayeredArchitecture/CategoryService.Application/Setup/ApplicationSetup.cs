@@ -1,7 +1,9 @@
 ﻿using CatalogService.Domain.Models;
 using CategoryService.Application.Commands;
+using CategoryService.Application.Commands.AddItem;
 using CategoryService.Application.Commands.AddOrUpdateCategory;
 using CategoryService.Application.Commands.DeleteCategory;
+using CategoryService.Application.Commands.DeleteItem;
 using CategoryService.Application.Interfaces.Commands;
 using CategoryService.Application.Interfaces.Queries;
 using CategoryService.Application.Queries;
@@ -26,5 +28,7 @@ public static class ApplicationSetup
 
         services.AddScoped<ICommandHandler<AddOrUpdateCategoryCommand>, AddOrUpdateCategoryCommandHandler>();
         services.AddScoped<ICommandHandler<DeleteCategoryCommand>, DeleteCategoryCommandHandler>();
+        services.AddScoped<ICommandHandler<AddItemCommand>, AddItemCommandHandler>();
+        services.AddScoped<ICommandHandler<DeleteItemCommand>, DeleteItemCommandHandler>();
     }
 }

@@ -15,4 +15,8 @@ public interface IApplicationContext
     Task UpdateCategory(Category category);
 
     Task<List<Item>> GetItemsByCategoryId(long id, int skip, int limit);
+
+    Task AddItem(long categoryId, Item item);
+
+    Task DeleteItem(long id);
 }

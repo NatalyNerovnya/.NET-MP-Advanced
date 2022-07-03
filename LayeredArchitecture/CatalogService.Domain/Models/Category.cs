@@ -8,5 +8,5 @@ public class Category
 
     public Uri? Image { get; set; }
 
-    public List<Item> Items { get; set; }
+    public List<Item>? Items { get; set; }
 }
