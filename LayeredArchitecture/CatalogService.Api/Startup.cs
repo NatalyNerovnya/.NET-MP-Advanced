@@ -1,3 +1,4 @@
+using CatalogService.Api.Middleware;
 using CatalogService.Infrastructure;
 using CategoryService.Application.Setup;
 
@@ -24,7 +25,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();

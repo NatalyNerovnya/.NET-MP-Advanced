@@ -15,9 +15,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CategoryService.Application
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatalogService.Infrastructure", "CatalogService.Infrastructure\CatalogService.Infrastructure.csproj", "{FC3FE491-6EB6-441A-A5A5-6F5141D14095}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CartingService.Api", "CartingService.Api\CartingService.Api.csproj", "{60EF688B-439A-4205-868D-44B5B7A669DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CartingService.Api", "CartingService.Api\CartingService.Api.csproj", "{60EF688B-439A-4205-868D-44B5B7A669DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatalogService.Api", "CatalogService.Api\CatalogService.Api.csproj", "{54AC9580-1C36-4541-83DA-88555A0E753D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatalogService.Api", "CatalogService.Api\CatalogService.Api.csproj", "{54AC9580-1C36-4541-83DA-88555A0E753D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notification", "Notification", "{3DE18C4D-0C04-4451-A468-E8300ADB07A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

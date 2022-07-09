@@ -7,6 +7,7 @@ using CategoryService.Application.Commands.DeleteItem;
 using CategoryService.Application.Interfaces.Commands;
 using CategoryService.Application.Interfaces.Queries;
 using CategoryService.Application.Queries;
+using CategoryService.Application.Queries.GetCategory;
 using CategoryService.Application.Queries.ListCategories;
 using CategoryService.Application.Queries.ListItems;
 using FluentValidation;
@@ -25,6 +26,7 @@ public static class ApplicationSetup
 
         services.AddScoped<IQueryHandler<ListCategoryQuery, List<Category>>, ListCategoryQueryHandler>();
         services.AddScoped<IQueryHandler<ListItemsQuery, List<Item>>, ListItemsQueryHandler>();
+        services.AddScoped<IQueryHandler<GetCategoryQuery, Category>, GetCategoryQueryHandler>();
 
         services.AddScoped<ICommandHandler<AddOrUpdateCategoryCommand>, AddOrUpdateCategoryCommandHandler>();
         services.AddScoped<ICommandHandler<DeleteCategoryCommand>, DeleteCategoryCommandHandler>();

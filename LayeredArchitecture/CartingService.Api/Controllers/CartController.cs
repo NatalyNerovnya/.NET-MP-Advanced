@@ -61,7 +61,7 @@ public class CartController: ControllerBase
         }
     }
 
-    [HttpPost("{id}/item")]
+    [HttpPost("{id}/items")]
     public async Task<ActionResult> AddItem(string id, Item item)
     {
         if (!int.TryParse(id, out var cartId))
@@ -92,7 +92,7 @@ public class CartController: ControllerBase
         }
     }
 
-    [HttpDelete("{id}/item/{itemId}")]
+    [HttpDelete("{id}/items/{itemId}")]
     public async Task<ActionResult> AddItem(string id, string itemId)
     {
         if (!int.TryParse(id, out var cartId) || !int.TryParse(itemId, out var parsedItemId))

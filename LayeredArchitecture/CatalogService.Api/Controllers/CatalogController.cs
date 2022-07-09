@@ -6,6 +6,7 @@ using CategoryService.Application.Commands.DeleteCategory;
 using CategoryService.Application.Commands.DeleteItem;
 using CategoryService.Application.Interfaces.Commands;
 using CategoryService.Application.Interfaces.Queries;
+using CategoryService.Application.Queries.GetCategory;
 using CategoryService.Application.Queries.ListCategories;
 using CategoryService.Application.Queries.ListItems;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace CatalogService.Api.Controllers;
 
 [ApiController]
+[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ActionResult))]
+[ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(ActionResult))]
+[ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(ActionResult))]
+[ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ActionResult))]
 public class CatalogController: ControllerBase
 {
     private readonly IQueryDispatcher _queryDispatcher;
@@ -24,135 +29,115 @@ public class CatalogController: ControllerBase
         _commandDispatcher = commandDispatcher;
     }
 
-    [HttpGet("category", Name = nameof(Get))]
+    [HttpGet("categories", Name = nameof(Get))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ActionResult<IEnumerable<Category>>))]
     public async Task<ActionResult<IEnumerable<Category>>> Get()
     {
-        try
-        {
-            var result = await _queryDispatcher.Send<ListCategoryQuery, List<Category>>(new ListCategoryQuery());
-            return Ok(result);
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e);
-        }
+        var result = await _queryDispatcher.Send<ListCategoryQuery, List<Category>>(new ListCategoryQuery());
+        return Ok(result);
     }
 
-    [HttpPost("category")]
+    [HttpGet("categories/{id}", Name = nameof(GetCategory))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ActionResult<Category>))]
+    public async Task<ActionResult<Category>> GetCategory(int id)
+    {
+        var result = await _queryDispatcher.Send<GetCategoryQuery, Category>(new GetCategoryQuery()
+        {
+            Id = id
+        });
+
+        return Ok(result);
+    }
+
+    [HttpPost("categories")]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ActionResult<ResponseWithLinks<object>>))]
     public async Task<ActionResult<ResponseWithLinks<object>>> Post(Category category)
     {
-        try
+        await _commandDispatcher.Send(new AddOrUpdateCategoryCommand()
         {
-            await _commandDispatcher.Send(new AddOrUpdateCategoryCommand()
+            Id = category.Id,
+            Name = category.Name,
+            Image = category.Image
+        });
+        var createdCategoryLink = Url.Link(nameof(GetCategory), new { id = category.Id });
+        var response = new ResponseWithLinks<object>()
+        {
+            Body = { },
+            Links = new List<Link>()
             {
-                Id = category.Id,
-                Name = category.Name,
-                Image = category.Image
-            });
-            var response = new ResponseWithLinks<object>()
-            {
-                Body = { },
-                Links = new List<Link>()
+                new()
                 {
-                    new()
-                    {
-                        Href = Url.Link(nameof(Get), new {} ) ?? "unknown",
-                        Method = "GET",
-                        Rel = "get_all"
-                    },
-                    new()
-                    {
-                        Href = Url.Link(nameof(Delete), new { id = category.Id}) ?? "unknown",
-                        Method = "DELETE",
-                        Rel = "delete"
-                    },
-                    new()
-                    {
-                        Href = Url.Link(nameof(GetItems), new { id = category.Id}) ?? "unknown",
-                        Method = "GET",
-                        Rel = "get_items"
-                    }
+                    Href = Url.Link(nameof(Get), new {} ) ?? "unknown",
+                    Method = "GET",
+                    Rel = "get_all"
+                },
+                new()
+                {
+                    Href = Url.Link(nameof(Delete), new { id = category.Id}) ?? "unknown",
+                    Method = "DELETE",
+                    Rel = "delete"
+                },
+                new()
+                {
+                    Href = Url.Link(nameof(GetItems), new { id = category.Id}) ?? "unknown",
+                    Method = "GET",
+                    Rel = "get_items"
                 }
-            };
+            }
+        };
 
-            return Ok(response);
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e);
-        }
+        return Created(createdCategoryLink, response);
     }
 
-    [HttpDelete("category/{id}", Name = nameof(Delete))]
+    [HttpDelete("categories/{id}", Name = nameof(Delete))]
+    [ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(ActionResult))]
     public async Task<ActionResult> Delete(long id)
     {
-        try
+        await _commandDispatcher.Send(new DeleteCategoryCommand()
         {
-            await _commandDispatcher.Send(new DeleteCategoryCommand()
+            Id = id
+        });
+        return NoContent();
+    }
+
+    [HttpGet("categories/{id}/items", Name = nameof(GetItems))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ActionResult<IEnumerable<Item>>))]
+    public async Task<ActionResult<IEnumerable<Item>>> GetItems(long id, [FromQuery] int skip, [FromQuery] int limit)
+    {
+        var result = await _queryDispatcher.Send<ListItemsQuery, List<Item>>(new ListItemsQuery()
+        {
+            Limit = limit,
+            Skip = skip,
+            CategoryId = id
+        });
+
+        return Ok(result);
+    }
+
+    [HttpPost("categories/{id}/items")]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ActionResult))]
+    public async Task<ActionResult> AddItem(long id, Item item)
+    {
+        await _commandDispatcher.Send(
+            new AddItemCommand()
             {
-                Id = id
+                CategoryId = id,
+                Item = item
             });
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e);
-        }
+
+        return Ok();
     }
 
-    [HttpGet("category/{id}/item", Name = nameof(GetItems))]
-    public async Task<ActionResult<IEnumerable<Category>>> GetItems(long id, [FromQuery] int skip, [FromQuery] int limit)
+    [HttpDelete("categories/{id}/items/{itemId}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(ActionResult))]
+    public async Task<ActionResult> DeleteItem(long id, long itemId)
     {
-        try
-        {
-            var result = await _queryDispatcher.Send<ListItemsQuery, List<Item>>(new ListItemsQuery()
+        await _commandDispatcher.Send(
+            new DeleteItemCommand()
             {
-                Limit = limit,
-                Skip = skip,
-                CategoryId = id
+                Id = itemId
             });
-            return Ok(result);
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e);
-        }
-    }
 
-    [HttpPost("category/{id}/item")]
-    public async Task<ActionResult<IEnumerable<Category>>> GetItems(long id, Item item)
-    {
-        try
-        {
-            await _commandDispatcher.Send(
-                new AddItemCommand()
-                {
-                    CategoryId = id,
-                    Item = item
-                });
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e);
-        }
-    }
-
-    [HttpDelete("category/{id}/item/{itemId}")]
-    public async Task<ActionResult<IEnumerable<Category>>> DeleteItem(long id, long itemId)
-    {
-        try
-        {
-            await _commandDispatcher.Send(
-                new DeleteItemCommand()
-                {
-                    Id = itemId
-                });
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e);
-        }
+        return NoContent();
     }
 }

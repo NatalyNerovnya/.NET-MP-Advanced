@@ -4,13 +4,13 @@ namespace CategoryService.Application.Interfaces;
 
 public interface IApplicationContext
 {
-    Task<Category?> GetCategoryById(long id);
+    Task<Category> GetCategoryById(long id);
 
     Task<List<Category>> GetAllCategories();
 
     Task AddCategory(Category category);
 
-    Task<bool> DeleteCategory(long id);
+    Task DeleteCategory(long id);
 
     Task UpdateCategory(Category category);
 
