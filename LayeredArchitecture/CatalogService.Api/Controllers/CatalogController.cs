@@ -4,6 +4,7 @@ using CategoryService.Application.Commands.AddItem;
 using CategoryService.Application.Commands.AddOrUpdateCategory;
 using CategoryService.Application.Commands.DeleteCategory;
 using CategoryService.Application.Commands.DeleteItem;
+using CategoryService.Application.Commands.UpdateItem;
 using CategoryService.Application.Interfaces.Commands;
 using CategoryService.Application.Interfaces.Queries;
 using CategoryService.Application.Queries.GetCategory;
@@ -118,12 +119,8 @@ public class CatalogController: ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ActionResult))]
     public async Task<ActionResult> AddItem(long id, Item item)
     {
-        await _commandDispatcher.Send(
-            new AddItemCommand()
-            {
-                CategoryId = id,
-                Item = item
-            });
+        item.CategoryId = id;
+        await _commandDispatcher.Send<AddItemCommand>((item as AddItemCommand)!);
 
         return Ok();
     }
@@ -139,5 +136,24 @@ public class CatalogController: ControllerBase
             });
 
         return NoContent();
+    }
+
+    [HttpPut("categories/{id}/items/{itemId}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ActionResult))]
+    public async Task<ActionResult> UpdateItem(long id, long itemId, UpdateItemModel item)
+    {
+        await _commandDispatcher.Send(
+            new UpdateItemCommand()
+            {
+                CategoryId = id,
+                Id = itemId,
+                Name = item.Name,
+                Price = item.Price,
+                Description = item.Description,
+                Amount = item.Quantity
+                
+            });
+
+        return Ok();
     }
 }

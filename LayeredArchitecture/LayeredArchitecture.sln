@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatalogService.Api", "Catal
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notification", "Notification", "{3DE18C4D-0C04-4451-A468-E8300ADB07A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationClient", "NotificationClient\NotificationClient.csproj", "{6993F966-A5F1-4DA3-98D9-830E3C9BD22C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{54AC9580-1C36-4541-83DA-88555A0E753D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54AC9580-1C36-4541-83DA-88555A0E753D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54AC9580-1C36-4541-83DA-88555A0E753D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6993F966-A5F1-4DA3-98D9-830E3C9BD22C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6993F966-A5F1-4DA3-98D9-830E3C9BD22C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6993F966-A5F1-4DA3-98D9-830E3C9BD22C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6993F966-A5F1-4DA3-98D9-830E3C9BD22C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +68,7 @@ Global
 		{FC3FE491-6EB6-441A-A5A5-6F5141D14095} = {67B94990-DF3F-4573-A89A-95684DA4E728}
 		{60EF688B-439A-4205-868D-44B5B7A669DD} = {C811A3B2-B60D-4C9F-98AE-64AA2DE51E1F}
 		{54AC9580-1C36-4541-83DA-88555A0E753D} = {67B94990-DF3F-4573-A89A-95684DA4E728}
+		{6993F966-A5F1-4DA3-98D9-830E3C9BD22C} = {3DE18C4D-0C04-4451-A468-E8300ADB07A9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9089CF81-1A77-4AA1-A7D4-152871BF6F2A}

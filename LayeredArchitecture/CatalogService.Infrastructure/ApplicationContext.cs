@@ -61,9 +61,19 @@ public class ApplicationContext: IApplicationContext
         return await _dbContext.Items.Where(x => x.CategoryId == existedCategory.Id).Skip(skip).Take(limit).ToListAsync();
     }
 
-    public async Task AddItem(long categoryId, Item item)
+    public async Task<Item> GetItem(long itemId)
     {
-        var category = await GetCategoryById(categoryId);
+        var existedItem = await _dbContext.Items.FirstOrDefaultAsync(x => x.Id == itemId);
+        if (existedItem is null)
+        {
+            throw new NotExistException($"Item with id {itemId} is not exists");
+        }
+        return existedItem;
+    }
+
+    public async Task AddItem(Item item)
+    {
+        var category = await GetCategoryById(item.CategoryId);
         var existedItem = await _dbContext.Items.Where(x => item.Id == x.Id).FirstOrDefaultAsync();
         if (existedItem is not null)
         {
@@ -72,6 +82,19 @@ public class ApplicationContext: IApplicationContext
 
         item.CategoryId = category.Id;
         _dbContext.Items.Add(item);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task UpdateItem(Item item)
+    {
+        var category = await GetCategoryById(item.CategoryId);
+        var existedItem = category.Items?.FirstOrDefault(x => x.Id == item.Id);
+        if (existedItem is null)
+        {
+            throw new NotExistException($"Item with id {item.Id} is not exists");
+        }
+
+        _dbContext.Items.Update(item);
         await _dbContext.SaveChangesAsync();
     }
 

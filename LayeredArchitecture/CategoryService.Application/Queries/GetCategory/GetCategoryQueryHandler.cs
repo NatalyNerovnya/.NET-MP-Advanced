@@ -4,7 +4,7 @@ using CategoryService.Application.Interfaces.Queries;
 
 namespace CategoryService.Application.Queries.GetCategory;
 
-public class GetCategoryQueryHandler : IQueryHandler<GetCategoryQuery, Category?>
+public class GetCategoryQueryHandler : IQueryHandler<GetCategoryQuery, Category>
 {
     private readonly IApplicationContext _context;
 
@@ -13,7 +13,7 @@ public class GetCategoryQueryHandler : IQueryHandler<GetCategoryQuery, Category?
         _context = context;
     }
 
-    public Task<Category?> Handle(GetCategoryQuery query)
+    public Task<Category> Handle(GetCategoryQuery query)
     {
         return _context.GetCategoryById(query.Id);
     }
