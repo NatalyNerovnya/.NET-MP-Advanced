@@ -76,6 +76,12 @@ public class CartController: ControllerBase
         }
     }
 
+    /// <summary>
+    /// Add item to cart
+    /// </summary>
+    /// <param name="id">cart id</param>
+    /// <param name="item">item</param>
+    /// <returns></returns>
     [HttpPost("{id}/items")]
     public async Task<ActionResult> AddItem(string id, Item item)
     {
@@ -107,8 +113,14 @@ public class CartController: ControllerBase
         }
     }
 
+    /// <summary>
+    /// Remove item from cart
+    /// </summary>
+    /// <param name="id">cart id</param>
+    /// <param name="itemId">item id</param>
+    /// <returns></returns>
     [HttpDelete("{id}/items/{itemId}")]
-    public async Task<ActionResult> AddItem(string id, string itemId)
+    public async Task<ActionResult> RemoveItem(string id, string itemId)
     {
         if (!int.TryParse(id, out var cartId) || !int.TryParse(itemId, out var parsedItemId))
         {
