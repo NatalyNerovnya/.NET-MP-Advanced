@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace CartingService.Api.Controllers;
 
 [ApiController]
+[ApiVersion("1")]
+[ApiVersion("2")]
+[Route("v{v:apiVersion}/[controller]")]
 public class CartController: ControllerBase
 {
     private readonly ICartService _cartService;
@@ -15,7 +18,13 @@ public class CartController: ControllerBase
         _cartService = cartService;
     }
     
-    [HttpGet("v2.0/[controller]/{id}")]
+    /// <summary>
+    /// GetItems v2
+    /// </summary>
+    /// <param name="id">cart id</param>
+    /// <returns>items </returns>
+    [HttpGet("{id}")]
+    [MapToApiVersion("2")]
     public async Task<ActionResult<IEnumerable<Item>>> GetV2(string id)
     {
         if (!int.TryParse(id, out var validId))
@@ -38,7 +47,13 @@ public class CartController: ControllerBase
         }
     }
 
+    /// <summary>
+    /// GetItems v1
+    /// </summary>
+    /// <param name="id">cart id</param>
+    /// <returns>cart with items</returns>
     [HttpGet("{id}")]
+    [MapToApiVersion("1")]
     public async Task<ActionResult<Cart>> Get(string id)
     {
         if (!int.TryParse(id, out var validId))
