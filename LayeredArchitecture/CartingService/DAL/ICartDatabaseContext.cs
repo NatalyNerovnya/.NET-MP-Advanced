@@ -7,4 +7,6 @@ public interface ICartDatabaseContext
     Task<Cart?> GetById(int id);
 
     Task Update(Cart cart);
+
+    Task<IEnumerable<Cart>> GetAll();
 }

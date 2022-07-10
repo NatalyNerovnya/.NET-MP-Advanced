@@ -21,8 +21,4 @@
     <ProjectReference Include="..\CartingService\CartingService.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DB\" />
-  </ItemGroup>
-
 </Project>

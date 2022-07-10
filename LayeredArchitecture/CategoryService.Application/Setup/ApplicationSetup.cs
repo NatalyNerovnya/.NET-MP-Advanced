@@ -36,6 +36,6 @@ public static class ApplicationSetup
         services.AddScoped<ICommandHandler<UpdateItemCommand>, UpdateItemCommandHandler>();
         services.AddScoped<ICommandHandler<DeleteItemCommand>, DeleteItemCommandHandler>();
 
-        services.AddNotification();
+        services.AddPublisher();
     }
 }
