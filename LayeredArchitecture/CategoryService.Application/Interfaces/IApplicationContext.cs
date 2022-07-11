@@ -4,13 +4,19 @@ namespace CategoryService.Application.Interfaces;
 
 public interface IApplicationContext
 {
-    Task<Category?> GetCategoryById(long id);
+    Task<Category> GetCategoryById(long id);
 
-    Task<IEnumerable<Category>> GetAllCategories();
+    Task<List<Category>> GetAllCategories();
 
-    Task<long> AddCategory(Category category);
+    Task AddCategory(Category category);
 
-    Task<bool> DeleteCategory(long id);
+    Task DeleteCategory(long id);
 
     Task UpdateCategory(Category category);
+
+    Task<List<Item>> GetItemsByCategoryId(long id, int skip, int limit);
+
+    Task AddItem(long categoryId, Item item);
+
+    Task DeleteItem(long id);
 }

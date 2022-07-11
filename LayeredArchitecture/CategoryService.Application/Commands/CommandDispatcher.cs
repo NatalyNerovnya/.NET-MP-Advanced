@@ -2,7 +2,7 @@
 
 namespace CategoryService.Application.Commands;
 
-public class CommandDispatcher: ICommandsDispatcher
+public class CommandDispatcher: ICommandDispatcher
 {
     private readonly IServiceProvider _service;
 
@@ -11,12 +11,12 @@ public class CommandDispatcher: ICommandsDispatcher
         _service = service;
     }
 
-    public void Send<T>(T command) where T : ICommand
+    public Task Send<T>(T command) where T : ICommand
     {
         var handler = _service.GetService(typeof(ICommandHandler<T>));
         if (handler != null)
         {
-            ((ICommandHandler<T>)handler).Handle(command);
+            return ((ICommandHandler<T>)handler).Handle(command);
         }
         else
         {

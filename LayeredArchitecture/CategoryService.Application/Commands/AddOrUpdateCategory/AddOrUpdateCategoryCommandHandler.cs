@@ -25,15 +25,15 @@ public class AddOrUpdateCategoryCommandHandler : ICommandHandler<AddOrUpdateCate
             failures.ForEach(f => { message.Append(f.ErrorMessage + Environment.NewLine); });
             throw new ValidationException(message.ToString());
         }
-        var existedCategory = await _context.GetCategoryById(command.Id);
 
-        if (existedCategory is null)
+        try
+        {
+            var existedCategory = await _context.GetCategoryById(command.Id);
+            await _context.UpdateCategory(command);
+        }
+        catch (NotExistException e)
         {
             await _context.AddCategory(command);
-        }
-        else
-        {
-            await _context.UpdateCategory(command);
         }
     }
 }

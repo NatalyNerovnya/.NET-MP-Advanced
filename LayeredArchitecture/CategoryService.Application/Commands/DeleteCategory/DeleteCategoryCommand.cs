@@ -4,5 +4,5 @@ namespace CategoryService.Application.Commands.DeleteCategory;
 
 public class DeleteCategoryCommand : ICommand
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
 }
