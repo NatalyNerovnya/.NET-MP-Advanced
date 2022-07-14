@@ -20,7 +20,6 @@ public class ItemChangedHandler : IHandler
 
         Console.WriteLine($"Processing message for item {item?.Id}");
 
-        //return _cartService.EditItem(item);
-        return Task.CompletedTask;
+        return _cartService.EditItem(item);
     }
 }
