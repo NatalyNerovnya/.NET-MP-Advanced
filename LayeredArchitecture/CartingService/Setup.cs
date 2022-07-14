@@ -10,6 +10,6 @@ public static class Setup
     {
         services.AddScoped<ICartService, CartService>();
         services.AddScoped<ICartRepository, CartRepository>();
-        services.AddScoped<ICartDatabaseContext>(s => new CartDatabaseContext("..\\Cart.db"));
+        services.AddScoped<ICartDatabaseContext>(s => new CartDatabaseContext(@"Filename=..\\Cart.db;connection=shared"));
     }
 }
