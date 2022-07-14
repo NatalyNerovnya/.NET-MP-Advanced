@@ -8,7 +8,7 @@ public static class Setup
 {
     public static void AddPublisher(this IServiceCollection services)
     {
-        var connectionString = "Endpoint=sb://net-mentoring.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=O1O323CxZpkhx7SYesuje0N7UG5onEaHeyUcgbVOJpY=";
+        var connectionString = "";
         var queueName = "item-changed";
         var client = new ServiceBusClient(connectionString);
 
@@ -18,7 +18,7 @@ public static class Setup
 
     public static void AddListener(this IServiceCollection services)
     {
-        var connectionString = "Endpoint=sb://net-mentoring.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=O1O323CxZpkhx7SYesuje0N7UG5onEaHeyUcgbVOJpY=";
+        var connectionString = "";
         var queueName = "item-changed";
         var client = new ServiceBusClient(connectionString);
 
