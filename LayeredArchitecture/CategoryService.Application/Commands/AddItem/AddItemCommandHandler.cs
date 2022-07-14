@@ -14,6 +14,6 @@ public class AddItemCommandHandler: ICommandHandler<AddItemCommand>
 
     public Task Handle(AddItemCommand command)
     {
-        return _applicationContext.AddItem(command.CategoryId, command.Item);
+        return _applicationContext.AddItem(command);
     }
 }

@@ -11,6 +11,11 @@ public class CartRepository : ICartRepository
         _cartDatabaseContext = cartDatabaseContext;
     }
 
+    public Task<List<Cart?>> GetAllCarts()
+    {
+        return _cartDatabaseContext.GetAll();
+    }
+
     public Task<Cart?> GetById(int id)
     {
         return _cartDatabaseContext.GetById(id);

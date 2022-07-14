@@ -16,7 +16,11 @@ public interface IApplicationContext
 
     Task<List<Item>> GetItemsByCategoryId(long id, int skip, int limit);
 
-    Task AddItem(long categoryId, Item item);
+    Task<Item> GetItem(long itemId);
+
+    Task AddItem(Item item);
+
+    Task UpdateItem(Item item);
 
     Task DeleteItem(long id);
 }
