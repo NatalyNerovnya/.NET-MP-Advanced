@@ -15,7 +15,6 @@
 
 	<ItemGroup>
     <ProjectReference Include="..\CartingService\CartingService.csproj" />
-    <ProjectReference Include="..\Listener\Listener.csproj" />
     <ProjectReference Include="..\NotificationClient\NotificationClient.csproj" />
   </ItemGroup>
 
