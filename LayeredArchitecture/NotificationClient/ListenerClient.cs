@@ -22,14 +22,21 @@ public class ListenerClient : BackgroundService
 
         while (!cancellationToken.IsCancellationRequested)
         {
+            var message = await _clientReceiver.ReceiveMessageAsync(cancellationToken: cancellationToken);
+            if (message is null)
+            {
+                continue;
+            }
+
             try
             {
-                var message = await _clientReceiver.ReceiveMessageAsync(cancellationToken: cancellationToken);
                 await _handler.Handle(Encoding.UTF8.GetString(message.Body));
+                await _clientReceiver.CompleteMessageAsync(message, cancellationToken);
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Exception during message processing");
+                Console.WriteLine($"Exception during message processing. Sending message to dlq");
+                await _clientReceiver.DeadLetterMessageAsync(message, cancellationToken: cancellationToken);
             }
         }
 
