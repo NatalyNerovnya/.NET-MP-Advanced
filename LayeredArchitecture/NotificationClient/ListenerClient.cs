@@ -5,7 +5,7 @@ using NotificationClient.Interfaces;
 
 namespace NotificationClient;
 
-public class ListenerClient: IHostedService
+public class ListenerClient : BackgroundService
 {
     private readonly ServiceBusReceiver _clientReceiver;
     private readonly IHandler _handler;
@@ -16,16 +16,26 @@ public class ListenerClient: IHostedService
         _handler = handler;
     }
 
-    public async Task StartAsync(CancellationToken cancellationToken)
+    protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
-        var message = await _clientReceiver.ReceiveMessageAsync(cancellationToken: cancellationToken);
-
-        await _handler.Handle(Encoding.UTF8.GetString(message.Body));
-
         Console.WriteLine("Listener service has been started.");
+
+        while (!cancellationToken.IsCancellationRequested)
+        {
+            try
+            {
+                var message = await _clientReceiver.ReceiveMessageAsync(cancellationToken: cancellationToken);
+                await _handler.Handle(Encoding.UTF8.GetString(message.Body));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Exception during message processing");
+            }
+        }
+
     }
 
-    public Task StopAsync(CancellationToken cancellationToken)
+    public override Task StopAsync(CancellationToken cancellationToken)
     {
         Console.WriteLine("Listener service has been stopped.");
         return _clientReceiver.CloseAsync(cancellationToken);

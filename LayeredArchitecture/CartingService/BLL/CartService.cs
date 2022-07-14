@@ -25,17 +25,25 @@ public class CartService: ICartService
 
     public async Task EditItem(Item item)
     {
-        var carts = await _cartRepository.GetAllCarts();
-        var tasks = new List<Task>();
-        foreach (var cart in carts.Where(x => x.Items.Any(i => i.Id == item.Id)))
+        try
         {
-            var oldItem = cart.Items.First(x => x.Id == item.Id);
-            cart.Items.Remove(oldItem);
-            cart.Items.Add(item);
-            tasks.Add(_cartRepository.Update(cart));
-        }
+            var carts = await _cartRepository.GetAllCarts();
+            var tasks = new List<Task>();
+            foreach (var cart in carts.Where(x => x.Items.Any(i => i.Id == item.Id)))
+            {
+                var oldItem = cart.Items.First(x => x.Id == item.Id);
+                cart.Items.Remove(oldItem);
+                cart.Items.Add(item);
+                tasks.Add(_cartRepository.Update(cart));
+            }
 
-        await Task.WhenAll(tasks);
+            await Task.WhenAll(tasks);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     public async Task AddItem(int cartId, Item item)

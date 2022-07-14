@@ -8,5 +8,5 @@ public interface ICartDatabaseContext
 
     Task Update(Cart cart);
 
-    Task<IEnumerable<Cart>> GetAll();
+    Task<List<Cart?>> GetAll();
 }

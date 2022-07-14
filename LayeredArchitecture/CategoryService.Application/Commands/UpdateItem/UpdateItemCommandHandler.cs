@@ -37,6 +37,7 @@ public class UpdateItemCommandHandler : ICommandHandler<UpdateItemCommand>
         }
 
         await _applicationContext.UpdateItem(existedItem);
-        await _publisherClient.Publish(JsonSerializer.Serialize(command));
+        var newItem = await _applicationContext.GetItem(existedItem.Id);
+        await _publisherClient.Publish(JsonSerializer.Serialize(newItem));
     }
 }

@@ -1,6 +1,5 @@
 using System.Reflection;
-using CartingService.BLL;
-using CartingService.DAL;
+using CartingService;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,9 +26,7 @@ builder.Services.AddVersionedApiExplorer(options =>
     options.SubstituteApiVersionInUrl = true;
 });
 
-builder.Services.AddScoped<ICartService, CartService>();
-builder.Services.AddScoped<ICartRepository, CartRepository>();
-builder.Services.AddScoped<ICartDatabaseContext>(s => new CartDatabaseContext(@"Cart.db"));
+builder.Services.AddCartService();
 
 var app = builder.Build();
 

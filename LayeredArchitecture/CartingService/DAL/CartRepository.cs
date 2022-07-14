@@ -11,7 +11,7 @@ public class CartRepository : ICartRepository
         _cartDatabaseContext = cartDatabaseContext;
     }
 
-    public Task<IEnumerable<Cart>> GetAllCarts()
+    public Task<List<Cart?>> GetAllCarts()
     {
         return _cartDatabaseContext.GetAll();
     }

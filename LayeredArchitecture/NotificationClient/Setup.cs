@@ -22,8 +22,7 @@ public static class Setup
         var queueName = "item-changed";
         var client = new ServiceBusClient(connectionString);
 
-        services.AddSingleton<ServiceBusReceiver>(s => client.CreateReceiver(queueName));
-
         services.AddHostedService<ListenerClient>();
+        services.AddScoped<ServiceBusReceiver>(s => client.CreateReceiver(queueName));
     }
 }

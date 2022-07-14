@@ -1,8 +1,9 @@
 ﻿using System.Text.Json;
+using CartingService.BLL;
 using CartingService.Entities.Models;
 using NotificationClient.Interfaces;
 
-namespace CartingService.BLL;
+namespace ItemChangedListener;
 
 public class ItemChangedHandler : IHandler
 {
@@ -16,6 +17,10 @@ public class ItemChangedHandler : IHandler
     public Task Handle(string message)
     {
         var item = JsonSerializer.Deserialize<Item>(message);
-        return _cartService.EditItem(item);
+
+        Console.WriteLine($"Processing message for item {item?.Id}");
+
+        //return _cartService.EditItem(item);
+        return Task.CompletedTask;
     }
 }

@@ -4,7 +4,7 @@ namespace CartingService.DAL;
 
 public interface ICartRepository
 {
-    Task<IEnumerable<Cart>> GetAllCarts();
+    Task<List<Cart?>> GetAllCarts();
 
     Task<Cart?> GetById(int id);
 
