@@ -26,7 +26,7 @@ builder.Services.AddVersionedApiExplorer(options =>
     options.SubstituteApiVersionInUrl = true;
 });
 
-builder.Services.AddCartService();
+builder.Services.AddCartService("..\\Cart.db");
 
 var app = builder.Build();
 

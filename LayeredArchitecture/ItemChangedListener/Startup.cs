@@ -11,7 +11,7 @@ public class Startup : IStartup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddListener();
-        services.AddCartService();
+        services.AddCartService("..\\..\\..\\..\\Cart.db");
         services.AddScoped<IHandler, ItemChangedHandler>();
 
         ConfigureOptions(services);
