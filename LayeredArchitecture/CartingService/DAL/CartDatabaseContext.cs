@@ -27,4 +27,11 @@ public class CartDatabaseContext : ICartDatabaseContext
         var collection = db.GetCollection<Cart>(CartCollectionName);
         return Task.FromResult(collection.Update(cart));
     }
+
+    public Task<List<Cart?>> GetAll()
+    {
+        using var db = new LiteDatabase(_connectionString);
+        var collection = db.GetCollection<Cart?>(CartCollectionName);
+        return Task.FromResult(collection.FindAll().ToList());
+    }
 }
