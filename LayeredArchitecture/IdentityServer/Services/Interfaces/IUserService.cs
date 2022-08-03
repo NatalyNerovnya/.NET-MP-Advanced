@@ -1,6 +1,6 @@
 ﻿using IdentityServer.Models;
 
-namespace IdentityServer.Services;
+namespace IdentityServer.Services.Interfaces;
 
 public interface IUserService
 {

@@ -1,5 +1,5 @@
 ﻿using IdentityServer.Models;
-using IdentityServer.Services;
+using IdentityServer.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IdentityServer.Controllers;
