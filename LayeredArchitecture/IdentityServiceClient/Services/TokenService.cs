@@ -1,11 +1,10 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using IdentityServer.Models;
-using IdentityServer.Services.Interfaces;
+using IdentityServiceClient.Models;
 using Microsoft.IdentityModel.Tokens;
 
-namespace IdentityServer.Services;
+namespace IdentityServiceClient.Services;
 
 public class TokenService : ITokenService
 {
@@ -42,6 +41,17 @@ public class TokenService : ITokenService
             return false;
         }
 
+        var role = GetClaim(token, "role");
+        return !string.IsNullOrEmpty(role);
+    }
+
+    public string GetClaim(string token, string claimName)
+    {
+        if (token == null)
+        {
+            return null;
+        }
+
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_secret);
         try
@@ -56,13 +66,13 @@ public class TokenService : ITokenService
             }, out SecurityToken validatedToken);
 
             var jwtToken = (JwtSecurityToken)validatedToken;
-            var userName = jwtToken.Claims.First(x => x.Type == "name").Value;
+            var claim = jwtToken.Claims.First(x => x.Type == claimName).Value;
 
-            return !string.IsNullOrEmpty(userName);
+            return claim;
         }
         catch
         {
-            return false;
+            return null;
         }
     }
 }

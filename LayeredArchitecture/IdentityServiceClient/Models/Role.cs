@@ -1,4 +1,4 @@
-﻿namespace IdentityServer.Models;
+﻿namespace IdentityServiceClient.Models;
 
 public class Role
 {

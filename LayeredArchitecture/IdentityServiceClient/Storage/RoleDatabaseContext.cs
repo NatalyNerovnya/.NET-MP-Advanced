@@ -1,7 +1,7 @@
-﻿using IdentityServer.Models;
+﻿using IdentityServiceClient.Models;
 using LiteDB;
 
-namespace IdentityServer.Storage;
+namespace IdentityServiceClient.Storage;
 
 public class RoleDatabaseContextL : IRoleDatabaseContext
 {

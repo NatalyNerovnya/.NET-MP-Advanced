@@ -1,8 +1,7 @@
-﻿using IdentityServer.Models;
-using IdentityServer.Services.Interfaces;
-using IdentityServer.Storage;
+﻿using IdentityServiceClient.Models;
+using IdentityServiceClient.Storage;
 
-namespace IdentityServer.Services;
+namespace IdentityServiceClient.Services;
 
 public class RoleService : IRoleService
 {

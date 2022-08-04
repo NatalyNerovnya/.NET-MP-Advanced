@@ -1,4 +1,5 @@
-﻿using CatalogService.Api.Models;
+﻿using CatalogService.Api.CustomAttributes;
+using CatalogService.Api.Models;
 using CatalogService.Domain.Models;
 using CategoryService.Application.Commands.AddItem;
 using CategoryService.Application.Commands.AddOrUpdateCategory;
@@ -31,6 +32,7 @@ public class CatalogController: ControllerBase
     }
 
     [HttpGet("categories", Name = nameof(Get))]
+    [Authorize("ReadWrite")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ActionResult<IEnumerable<Category>>))]
     public async Task<ActionResult<IEnumerable<Category>>> Get()
     {
@@ -39,6 +41,7 @@ public class CatalogController: ControllerBase
     }
 
     [HttpGet("categories/{id}", Name = nameof(GetCategory))]
+    [Authorize("Read")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ActionResult<Category>))]
     public async Task<ActionResult<Category>> GetCategory(int id)
     {
@@ -51,6 +54,7 @@ public class CatalogController: ControllerBase
     }
 
     [HttpPost("categories")]
+    [Authorize("ReadWrite")]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ActionResult<ResponseWithLinks<object>>))]
     public async Task<ActionResult<ResponseWithLinks<object>>> Post(Category category)
     {
@@ -91,6 +95,7 @@ public class CatalogController: ControllerBase
     }
 
     [HttpDelete("categories/{id}", Name = nameof(Delete))]
+    [Authorize("ReadWrite")]
     [ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(ActionResult))]
     public async Task<ActionResult> Delete(long id)
     {
@@ -102,6 +107,7 @@ public class CatalogController: ControllerBase
     }
 
     [HttpGet("categories/{id}/items", Name = nameof(GetItems))]
+    [Authorize("ReadWrite")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ActionResult<IEnumerable<Item>>))]
     public async Task<ActionResult<IEnumerable<Item>>> GetItems(long id, [FromQuery] int skip, [FromQuery] int limit)
     {
@@ -116,6 +122,7 @@ public class CatalogController: ControllerBase
     }
 
     [HttpPost("categories/{id}/items")]
+    [Authorize("ReadWrite")]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ActionResult))]
     public async Task<ActionResult> AddItem(long id, Item item)
     {
@@ -126,6 +133,7 @@ public class CatalogController: ControllerBase
     }
 
     [HttpDelete("categories/{id}/items/{itemId}")]
+    [Authorize("Manager")]
     [ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(ActionResult))]
     public async Task<ActionResult> DeleteItem(long id, long itemId)
     {
@@ -139,6 +147,7 @@ public class CatalogController: ControllerBase
     }
 
     [HttpPut("categories/{id}/items/{itemId}")]
+    [Authorize("ReadWrite")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ActionResult))]
     public async Task<ActionResult> UpdateItem(long id, long itemId, UpdateItemModel item)
     {

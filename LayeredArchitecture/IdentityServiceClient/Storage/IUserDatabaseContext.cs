@@ -1,6 +1,6 @@
-﻿using IdentityServer.Models;
+﻿using IdentityServiceClient.Models;
 
-namespace IdentityServer.Storage;
+namespace IdentityServiceClient.Storage;
 
 public interface IUserDatabaseContext
 {
