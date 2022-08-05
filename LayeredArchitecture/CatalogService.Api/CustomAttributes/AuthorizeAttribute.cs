@@ -26,7 +26,8 @@ public class AuthorizeAttribute : Attribute, IAuthorizationFilter
             return;
         }
 
-        var rolePermissions = JsonConvert.DeserializeObject<List<Permissions>>(context.HttpContext.Items["permissions"].ToString());
+        if (context.HttpContext.Items.TryGetValue("permissions", out var permissions)) { }
+        var rolePermissions = JsonConvert.DeserializeObject<List<Permissions>>(permissions?.ToString() ?? string.Empty);
         var allowedAccess = GetPermissions();
         if (!allowedAccess.Any() || rolePermissions is null || !rolePermissions.Any() || !allowedAccess.All(x => rolePermissions.Contains(x)))
         {
