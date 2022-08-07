@@ -32,7 +32,7 @@ public class CatalogController: ControllerBase
     }
 
     [HttpGet("categories", Name = nameof(Get))]
-    [Authorize("ReadWrite")]
+    [Authorize("Read")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ActionResult<IEnumerable<Category>>))]
     public async Task<ActionResult<IEnumerable<Category>>> Get()
     {
@@ -107,6 +107,7 @@ public class CatalogController: ControllerBase
     }
 
     [HttpGet("categories/{id}/items", Name = nameof(GetItems))]
+    [Authorize("Read")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ActionResult<IEnumerable<Item>>))]
     public async Task<ActionResult<IEnumerable<Item>>> GetItems(long id, [FromQuery] int skip, [FromQuery] int limit)
     {
@@ -166,6 +167,7 @@ public class CatalogController: ControllerBase
     }
 
     [HttpGet("categories/{id}/items/{itemId}/details")]
+    [Authorize("Read")]
     [ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(ActionResult))]
     public ActionResult<List<Dictionary<string, string>>> GetItemDetails(long id, long itemId)
     {

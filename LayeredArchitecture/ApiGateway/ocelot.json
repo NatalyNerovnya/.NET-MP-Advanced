@@ -9,13 +9,13 @@
           "Port": 7275
         }
       ],
-      "UpstreamPathTemplate": "/api/{id}",
+      "UpstreamPathTemplate": "/cart/{id}",
       "UpstreamHttpMethod": [ "Get" ],
       "SwaggerKey": "api"
     },
     {
       "DownstreamPathTemplate": "/categories/{id}/items/{itemId}/details",
-      "UpstreamPathTemplate": "/api/{id}/items/{itemId}/details",
+      "UpstreamPathTemplate": "/catalog/{id}/items/{itemId}/details",
       "UpstreamHttpMethod": [
         "Get"
       ],
@@ -34,7 +34,7 @@
     },
     {
       "DownstreamPathTemplate": "/categories/{id}",
-      "UpstreamPathTemplate": "/api/{id}/items",
+      "UpstreamPathTemplate": "/catalog/{id}/items",
       "UpstreamHttpMethod": [
         "Get"
       ],
