@@ -14,10 +14,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddOcelot();
-builder.Services.AddSwaggerForOcelot(builder.Configuration,
-    (o) => {
-        o.GenerateDocsForGatewayItSelf = true;
-    });
+builder.Services.AddSwaggerForOcelot(builder.Configuration);
 builder.Services.AddCacheManager();
 
 
