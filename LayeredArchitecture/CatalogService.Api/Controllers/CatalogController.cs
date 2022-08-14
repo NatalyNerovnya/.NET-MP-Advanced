@@ -24,11 +24,13 @@ public class CatalogController: ControllerBase
 {
     private readonly IQueryDispatcher _queryDispatcher;
     private readonly ICommandDispatcher _commandDispatcher;
+    private readonly ILogger<CatalogController> _logger;
 
-    public CatalogController(IQueryDispatcher queryDispatcher, ICommandDispatcher commandDispatcher)
+    public CatalogController(IQueryDispatcher queryDispatcher, ICommandDispatcher commandDispatcher, ILogger<CatalogController> logger)
     {
         _queryDispatcher = queryDispatcher;
         _commandDispatcher = commandDispatcher;
+        _logger = logger;
     }
 
     [HttpGet("categories", Name = nameof(Get))]
@@ -36,6 +38,7 @@ public class CatalogController: ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ActionResult<IEnumerable<Category>>))]
     public async Task<ActionResult<IEnumerable<Category>>> Get()
     {
+        _logger.LogInformation($"Action started: Get categories");
         var result = await _queryDispatcher.Send<ListCategoryQuery, List<Category>>(new ListCategoryQuery());
         return Ok(result);
     }
@@ -45,6 +48,7 @@ public class CatalogController: ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ActionResult<Category>))]
     public async Task<ActionResult<Category>> GetCategory(int id)
     {
+        _logger.LogInformation($"Action started: Get category by id {id}");
         var result = await _queryDispatcher.Send<GetCategoryQuery, Category>(new GetCategoryQuery()
         {
             Id = id
@@ -58,6 +62,8 @@ public class CatalogController: ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ActionResult<ResponseWithLinks<object>>))]
     public async Task<ActionResult<ResponseWithLinks<object>>> Post(Category category)
     {
+        _logger.LogInformation($"Action started: Add category");
+
         await _commandDispatcher.Send(new AddOrUpdateCategoryCommand()
         {
             Id = category.Id,
@@ -99,6 +105,8 @@ public class CatalogController: ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(ActionResult))]
     public async Task<ActionResult> Delete(long id)
     {
+        _logger.LogInformation($"Action started: Delete category by id {id}");
+
         await _commandDispatcher.Send(new DeleteCategoryCommand()
         {
             Id = id
@@ -111,6 +119,8 @@ public class CatalogController: ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ActionResult<IEnumerable<Item>>))]
     public async Task<ActionResult<IEnumerable<Item>>> GetItems(long id, [FromQuery] int skip, [FromQuery] int limit)
     {
+        _logger.LogInformation($"Action started: Get items by category id {id}");
+
         var result = await _queryDispatcher.Send<ListItemsQuery, List<Item>>(new ListItemsQuery()
         {
             Limit = limit,
@@ -126,6 +136,8 @@ public class CatalogController: ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ActionResult))]
     public async Task<ActionResult> AddItem(long id, Item item)
     {
+        _logger.LogInformation($"Action started: Add items to category id {id}");
+
         item.CategoryId = id;
         await _commandDispatcher.Send<AddItemCommand>((item as AddItemCommand)!);
 
@@ -137,6 +149,8 @@ public class CatalogController: ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(ActionResult))]
     public async Task<ActionResult> DeleteItem(long id, long itemId)
     {
+        _logger.LogInformation($"Action started: Delete item by id {itemId}");
+
         await _commandDispatcher.Send(
             new DeleteItemCommand()
             {
@@ -151,6 +165,8 @@ public class CatalogController: ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ActionResult))]
     public async Task<ActionResult> UpdateItem(long id, long itemId, UpdateItemModel item)
     {
+        _logger.LogInformation($"Action started: Update item by id {itemId}");
+
         await _commandDispatcher.Send(
             new UpdateItemCommand()
             {
@@ -171,6 +187,8 @@ public class CatalogController: ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(ActionResult))]
     public ActionResult<List<Dictionary<string, string>>> GetItemDetails(long id, long itemId)
     {
+        _logger.LogInformation($"Action started: mock request for {id}");
+
         var itemDetails = new Dictionary<string, string>()
         {
             { "brand", "Samsung" },

@@ -9,6 +9,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTokenService();
+builder.Services.AddLogging();
+builder.Services.AddApplicationInsightsTelemetry();
 
 var app = builder.Build();
 

@@ -1,5 +1,4 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
+using Logging;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 
@@ -16,6 +15,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddOcelot();
 builder.Services.AddSwaggerForOcelot(builder.Configuration);
 builder.Services.AddCacheManager();
+builder.Services.AddLogging();
+builder.Services.AddApplicationInsightsTelemetry();
 
 
 var app = builder.Build();
@@ -35,7 +36,7 @@ app.UseHttpsRedirection();
 
 
 app.UseOcelot();
-
+app.UseMiddleware<LoggingMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();

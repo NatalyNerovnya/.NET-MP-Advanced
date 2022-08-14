@@ -3,6 +3,7 @@ using CatalogService.Infrastructure;
 using CategoryService.Application.Setup;
 using IdentityServiceClient.Services;
 using IdentityServiceClient.Storage;
+using Logging;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,6 +36,8 @@ builder.Services.AddSwaggerGen(c => {
     });
 });
 builder.Services.AddEntityFrameworkSqlite();
+builder.Services.AddLogging();
+builder.Services.AddApplicationInsightsTelemetry();
 
 builder.Services.AddCatalogDbContext();
 builder.Services.AddSingleton<ITokenService>(s => new TokenService("SomeLongClientId"));
@@ -54,6 +57,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseMiddleware<JwtMiddleware>();
+app.UseMiddleware<LoggingMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();

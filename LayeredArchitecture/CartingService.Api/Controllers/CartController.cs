@@ -12,10 +12,12 @@ namespace CartingService.Api.Controllers;
 public class CartController: ControllerBase
 {
     private readonly ICartService _cartService;
+    private readonly ILogger<CartController> _logger;
 
-    public CartController(ICartService cartService)
+    public CartController(ICartService cartService, ILogger<CartController> logger)
     {
         _cartService = cartService;
+        _logger = logger;
     }
     
     /// <summary>
@@ -27,8 +29,10 @@ public class CartController: ControllerBase
     [MapToApiVersion("2")]
     public async Task<ActionResult<IEnumerable<Item>>> GetV2(string id)
     {
+        _logger.LogInformation("Action started: Get cart items v2");
         if (!int.TryParse(id, out var validId))
         {
+            _logger.LogError($"Id {id} is of invalid format");
             return BadRequest();
         }
 
@@ -39,10 +43,12 @@ public class CartController: ControllerBase
         }
         catch (CartNotFoundException e)
         {
+            _logger.LogError($"Cart with {id} is not found");
             return NotFound();
         }
         catch (Exception e)
         {
+            _logger.LogError($"Error during cart retrieval: {e.Message}");
             return BadRequest(e);
         }
     }
@@ -56,8 +62,11 @@ public class CartController: ControllerBase
     [MapToApiVersion("1")]
     public async Task<ActionResult<Cart>> Get(string id)
     {
+        _logger.LogInformation("Action started: Get cart items v1");
+
         if (!int.TryParse(id, out var validId))
         {
+            _logger.LogError($"Id {id} is of invalid format");
             return BadRequest();
         }
 
@@ -68,10 +77,12 @@ public class CartController: ControllerBase
         }
         catch (CartNotFoundException e)
         {
+            _logger.LogError($"Cart with {id} is not found");
             return NotFound();
         }
         catch (Exception e)
         {
+            _logger.LogError($"Error during cart retrieval: {e.Message}");
             return BadRequest(e);
         }
     }
@@ -85,6 +96,8 @@ public class CartController: ControllerBase
     [HttpPost("{id}/items")]
     public async Task<ActionResult> AddItem(string id, Item item)
     {
+        _logger.LogInformation("Action started: Add item to cart");
+
         if (!int.TryParse(id, out var cartId))
         {
             return BadRequest();
@@ -97,18 +110,22 @@ public class CartController: ControllerBase
         }
         catch (CartNotFoundException e)
         {
+            _logger.LogError($"Cart {cartId} doesn't exists.");
             return NotFound($"Cart {cartId} doesn't exists.");
         }
         catch (ItemDuplicateException e)
         {
+            _logger.LogError($"Item with id = {item.Id} already exists");
             return BadRequest($"Item with id = {item.Id} already exists");
         }
         catch (ItemNotValidException e)
         {
+            _logger.LogError($"Item is not valid");
             return BadRequest($"Item is not valid");
         }
         catch (Exception e)
         {
+            _logger.LogError($"Error during item adding: {e.Message}");
             return BadRequest(e);
         }
     }
@@ -122,6 +139,8 @@ public class CartController: ControllerBase
     [HttpDelete("{id}/items/{itemId}")]
     public async Task<ActionResult> RemoveItem(string id, string itemId)
     {
+        _logger.LogInformation("Action started: Remove item from cart");
+
         if (!int.TryParse(id, out var cartId) || !int.TryParse(itemId, out var parsedItemId))
         {
             return BadRequest();
@@ -142,6 +161,7 @@ public class CartController: ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError($"Error during item removing: {e.Message}");
             return BadRequest(e);
         }
     }

@@ -1,5 +1,6 @@
 using System.Reflection;
 using CartingService;
+using Logging;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +26,8 @@ builder.Services.AddVersionedApiExplorer(options =>
     options.GroupNameFormat = "'v'VVV";
     options.SubstituteApiVersionInUrl = true;
 });
+builder.Services.AddLogging();
+builder.Services.AddApplicationInsightsTelemetry();
 
 builder.Services.AddCartService("..\\Cart.db");
 
@@ -49,7 +52,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
+app.UseMiddleware<LoggingMiddleware>();
 app.MapControllers();
 app.UseRouting();
 app.Run();
