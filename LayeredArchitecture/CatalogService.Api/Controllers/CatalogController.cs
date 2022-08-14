@@ -165,4 +165,19 @@ public class CatalogController: ControllerBase
 
         return Ok();
     }
+
+    [HttpGet("categories/{id}/items/{itemId}/details")]
+    [Authorize("Read")]
+    [ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(ActionResult))]
+    public ActionResult<List<Dictionary<string, string>>> GetItemDetails(long id, long itemId)
+    {
+        var itemDetails = new Dictionary<string, string>()
+        {
+            { "brand", "Samsung" },
+            { "model", "s10" },
+            { "region", "EU" }
+        };
+
+        return Ok(itemDetails);
+    }
 }
