@@ -4,6 +4,7 @@ using CategoryService.Application.Setup;
 using IdentityServiceClient.Services;
 using IdentityServiceClient.Storage;
 using Logging;
+using Microsoft.Extensions.Logging.ApplicationInsights;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,7 +37,11 @@ builder.Services.AddSwaggerGen(c => {
     });
 });
 builder.Services.AddEntityFrameworkSqlite();
-builder.Services.AddLogging();
+builder.Services.AddLogging(builder =>
+{
+    builder.AddApplicationInsights();
+    builder.AddFilter<ApplicationInsightsLoggerProvider>("", LogLevel.Information);
+});
 builder.Services.AddApplicationInsightsTelemetry();
 
 builder.Services.AddCatalogDbContext();

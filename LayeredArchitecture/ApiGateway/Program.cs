@@ -1,4 +1,5 @@
 using Logging;
+using Microsoft.Extensions.Logging.ApplicationInsights;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 
@@ -15,7 +16,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddOcelot();
 builder.Services.AddSwaggerForOcelot(builder.Configuration);
 builder.Services.AddCacheManager();
-builder.Services.AddLogging();
+builder.Services.AddLogging(builder =>
+{
+    builder.AddApplicationInsights();
+    builder.AddFilter<ApplicationInsightsLoggerProvider>("", LogLevel.Information);
+});
 builder.Services.AddApplicationInsightsTelemetry();
 
 

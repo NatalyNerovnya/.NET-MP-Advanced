@@ -2,6 +2,7 @@ using System.Reflection;
 using CartingService;
 using Logging;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.Extensions.Logging.ApplicationInsights;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +27,11 @@ builder.Services.AddVersionedApiExplorer(options =>
     options.GroupNameFormat = "'v'VVV";
     options.SubstituteApiVersionInUrl = true;
 });
-builder.Services.AddLogging();
+builder.Services.AddLogging(builder =>
+{
+    builder.AddFilter<ApplicationInsightsLoggerProvider>("", LogLevel.Information);
+    builder.AddApplicationInsights();
+});
 builder.Services.AddApplicationInsightsTelemetry();
 
 builder.Services.AddCartService("..\\Cart.db");
